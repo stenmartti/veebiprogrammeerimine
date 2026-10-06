@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+	<meta charset="utf-8">
+	<title>Sten Vikat, veebiprogrammeerimine</title>
+</head>
+<body>
+	<img src="../pic/veebiprogrammeerimine_2026_ID.png" alt="bänner">
+	<h1>Eesti filmiga seotud inimesed</h1>
+	<ul>
+		<li><a href="/">Tagasi avalehele</a></li>li>
+		<li><a href="/eestifilm">Tagasi Eesti filmi avalehele</a></li>li>
+	</ul>
+	<hr>
+	<ol>
+		<% personList.forEach(function(person){ %>
+		<li><%= person.first_name %> <%= person.last_name %>, sündinud <%= person.born %></li>
+		<% }); %>	
+	</ol>	
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "veebiprogrammeerimine",
+  "version": "1.0.0",
+  "description": "õppetöö raames tehtud veeb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://stenmartti@github.com/stenmartti/veebiprogrammeerimine.git"
+  },
+  "keywords": [
+    "TLÜ",
+    "DTI",
+    "veeb",
+    "õppetöö"
+  ],
+  "author": "Sten-Martti Vikat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stenmartti/veebiprogrammeerimine/issues"
+  },
+  "homepage": "https://github.com/stenmartti/veebiprogrammeerimine#readme",
+  "dependencies": {
+    "dotenv": "^18.0.5",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "mysql2": "^3.24.5"
+  }
+}
