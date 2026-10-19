@@ -5,15 +5,63 @@
 	<title>Sten Vikat, veebiprogrammeerimine</title>
 </head>
 <body>
-	<img src="pic/veebiprogrammeerimine_2026_ID.png" alt="bänner">
-	<h1>Registreeri oma külastus</h1>
+	<img src="../pic/veebiprogrammeerimine_2026_ID.png" alt="bänner">
+	<h1>Lisa filmiga seotud seoseid</h1>
+	<ul>
+		<li><a href="/">Tagasi avalehele</a></li>
+		<li><a href="/eestifilm">Tagasi Eesti filmi avalehele</a></li>
+		<li><a href="/eestifilm/seosed_nimekiri">Vaata seoseid</a></li>
+	</ul>
+	<hr>
 	<form method="POST">
-		<label for="inputName">Palun sisesta oma nimi:</label>
-		<input id="inputName" name="inputName" type="text" placeholder="Sinu nimi ...">
+		<label for="personInput">Isik</label>
+		<select id="personInput" name="personInput">
+			<option disabled <%= !selectedPerson ? 'selected' : '' %>>Vali isik ...</option>
+			<% personList.forEach(function(person){ %>
+			<option value="<%= person.id %>" <%= String(selectedPerson) === String(person.id) ? 'selected' : '' %>><%= person.first_name %> <%= person.last_name %></option>
+			<% }); %>
+		</select>
 		<br>
-		<input id="regSubmit" name="regSubmit" type="submit" value="Salvesta">
+		<label for="movieInput">Film</label>
+		<select id="movieInput" name="movieInput">
+			<option disabled <%= !selectedMovie ? 'selected' : '' %>>Vali film ...</option>
+			<% movieList.forEach(function(movie){ %>
+			<option value="<%= movie.id %>" <%= String(selectedMovie) === String(movie.id) ? 'selected' : '' %>><%= movie.title %> (<%= movie.release_year %>)</option>
+			<% }); %>
+		</select>
+		<br>
+		<label for="professionInput">Amet</label>
+		<select id="professionInput" name="professionInput">
+			<option disabled <%= !selectedProfession ? 'selected' : '' %>>Vali amet ...</option>
+			<% professionList.forEach(function(profession){ %>
+			<option value="<%= profession.id %>" data-title="<%= profession.title %>" <%= String(selectedProfession) === String(profession.id) ? 'selected' : '' %>><%= profession.title %></option>
+			<% }); %>
+		</select>
+		<br>
+		<div id="characterBlock" style="display: none;">
+			<label for="characterInput">Tegelaskuju nimi</label>
+			<input id="characterInput" name="characterInput" type="text" placeholder="Tegelaskuju" value="<%= characterName %>">
+			<br>
+		</div>
+		<input id="relationSubmit" name="relationSubmit" type="submit" value="Salvesta">
 	</form>
-	<p><a href="/">Tagasi avalehele</a></p>
-	<p><a href="/viimanekulastus">Siit saad vaadata viimast külastust</a></p>
+	<p><%= notice %></p>
+
+	<script>
+		const professionSelect = document.getElementById('professionInput');
+		const characterBlock = document.getElementById('characterBlock');
+		//näitab tegelaskuju välja ainult siis, kui valitud amet on "näitleja"
+		function kontrolliAmet(){
+			const valitud = professionSelect.options[professionSelect.selectedIndex];
+			if(valitud && valitud.dataset.title && valitud.dataset.title.toLowerCase() === 'näitleja'){
+				characterBlock.style.display = '';
+			}
+			else {
+				characterBlock.style.display = 'none';
+			}
+		}
+		professionSelect.addEventListener('change', kontrolliAmet);
+		kontrolliAmet();
+	</script>
 </body>
 </html>

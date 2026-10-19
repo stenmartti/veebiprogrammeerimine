@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+	<meta charset="utf-8">
+	<title>Sten Vikat, veebiprogrammeerimine</title>
+</head>
+<body>
+	<img src="../pic/veebiprogrammeerimine_2026_ID.png" alt="bänner">
+	<h1>Eesti filmi seosed</h1>
+	<ul>
+		<li><a href="/">Tagasi avalehele</a></li>
+		<li><a href="/eestifilm">Tagasi Eesti filmi avalehele</a></li>
+		<li><a href="/eestifilm/seosed">Lisa seoseid</a></li>
+	</ul>
+	<hr>
+	<ol>
+		<% relationList.forEach(function(relation){ %>
+		<li><%= relation.first_name %> <%= relation.last_name %>, <%= relation.profession_title %>, film "<%= relation.movie_title %>" (<%= relation.release_year %>)<% if(relation.character_name){ %>, tegelaskuju: <%= relation.character_name %><% } %></li>
+		<% }); %>
+	</ol>
+
+</body>
+</html>

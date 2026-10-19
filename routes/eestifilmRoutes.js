@@ -12,7 +12,8 @@ const {
     ametidAdd,
     ametidAddPost,
     eestiFilmSeosed,
-    eestiFilmSeosedPost} = require('../controllers/eestifilmControllers');
+    eestiFilmSeosedPost,
+eestiFilmSeosedList} = require('../controllers/eestifilmControllers');
 
 router.route('/').get(eestifilm);
 
@@ -33,6 +34,8 @@ router.route('/ametid_lisa').post(ametidAddPost);
 router.route('/seosed').get(eestiFilmSeosed);
 
 router.route('/seosed').post(eestiFilmSeosedPost);
+
+router.route('/seosed_nimekiri').get(eestiFilmSeosedList);
 
 
 
