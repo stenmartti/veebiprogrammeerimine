@@ -14,16 +14,16 @@
 	<hr>
 	<form method="POST">
 		<label for="firstNameInput">Filmiinimese eesnimi</label>
-		<input id="firstNameInput" name="firstNameInput" type="text" placeholder="Eesnimi" required>
+		<input id="firstNameInput" name="firstNameInput" type="text" placeholder="Eesnimi" value="<%= firstName %>" required>
 		<br>
 		<label for="lastNameInput">Filmiinimese eesnimi</label>
-		<input id="lastNameInput" name="lastNameInput" type="text" placeholder="Perekonnanimi" required>
+		<input id="lastNameInput" name="lastNameInput" type="text" placeholder="Perekonnanimi" value="<%= lastName %>" required>
 		<br>
 		<label for="bornInput">Filmiinimese sünnikuupäev</label>
-		<input id="bornInput" name="bornInput" type="date" required>
+		<input id="bornInput" name="bornInput" type="date" value="<%= born %>" required>
 		<br>
 		<label for="deceasedInput">Filmiinimese surmakuupäev</label>
-		<input id="deceasedInput" name="deceasedInput" type="date">
+		<input id="deceasedInput" name="deceasedInput" type="date" value="<%= deceased %>">
 		<br>
 		<input id="personSubmit" name="personSubmit" type="submit" value="Salvesta">
 	</form>

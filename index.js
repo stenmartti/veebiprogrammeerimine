@@ -63,7 +63,13 @@ app.get('/vanasona', async (req, res)=>{
 	}
 });
 
-app.get('/regvisit', (req, res)=>{
+
+//regvisit marsruut
+const regvisitRouter = require('./routes/regvisitRoutes');
+app.use('/regvisit', regvisitRouter);
+
+
+/* app.get('/regvisit', (req, res)=>{
 	res.render('regvisit');
 });
 
@@ -80,13 +86,17 @@ app.post('/regvisit', async (req, res)=>{
 		res.render('regvisit');
 	}
 	
-});
+}); */
 
-app.get('/eestifilm', (req, res)=>{
+//Eesti filmi marsruudid
+const eestiFilmRouter = require('./routes/eestifilmRoutes');
+app.use('/eestifilm', eestiFilmRouter);
+
+/* app.get('/eestifilm', (req, res)=>{
 	res.render('eestifilm');
-});
+}); */
 
-app.get('/eestifilm/inimesed', async (req, res)=>{
+/* app.get('/eestifilm/inimesed', async (req, res)=>{
 	let conn;
 	try {
 		conn = await mysql.createConnection({
@@ -111,25 +121,53 @@ app.get('/eestifilm/inimesed', async (req, res)=>{
 		}
 	}
 	
-});
+}); */
 
-app.get('/eestifilm/inimesed_lisa', (req, res)=>{
-	res.render('eestifilminimesed_lisa', {notice: 'Ootan sisestust!'});
-});
+/* app.get('/eestifilm/inimesed_lisa', (req, res)=>{
+	res.render('eestifilminimesed_lisa', {notice: 'Ootan sisestust!', firstName: null, lastName: null, born: null, deceased: null});
+}); */
 
-app.post('/eestifilm/inimesed_lisa', async (req, res)=>{
+/* app.post('/eestifilm/inimesed_lisa', async (req, res)=>{
 	console.log(req.body);
-	//kontrollime andmeid
+	//kontrollime andmeid, iga sisendi kohta eraldi, vead kogume muutujasse notice
+	let notice = '';
 	//sisestatud sünnikuupäev (tekst) teisendada kuupäevaks
 	const bornDate = new Date(req.body.bornInput);
 	const timeNow = new Date();
-	if(!req.body.firstNameInput || !req.body.lastNameInput || !req.body.bornInput || isNaN(bornDate.getTime() || bornDate > timeNow)) {
-		console.log("Andmed pole korrektsed!");
-		return res.render('eestifilminimesed_lisa');
+	if(!req.body.firstNameInput){
+		notice += 'Eesnimi on puudu! ';
+	}
+	if(!req.body.lastNameInput){
+		notice += 'Perekonnanimi on puudu! ';
+	}
+	if(!req.body.bornInput){
+		notice += 'Sünnikuupäev on puudu! ';
+	}
+	else if(isNaN(bornDate.getTime())){
+		notice += 'Sünnikuupäev ei ole reaalne kuupäev! ';
+	}
+	else if(bornDate > timeNow){
+		notice += 'Sünnikuupäev ei saa olla tulevikus! ';
 	}
 	let deceasedDate = null;
 	if(req.body.deceasedInput != ''){
 		deceasedDate = req.body.deceasedInput;
+		//surmakuupäev (tekst) teisendada kuupäevaks
+		const deceasedObj = new Date(req.body.deceasedInput);
+		if(isNaN(deceasedObj.getTime())){
+			notice += 'Surmakuupäev ei ole reaalne kuupäev! ';
+		}
+		else if(deceasedObj > timeNow){
+			notice += 'Surmakuupäev ei saa olla tulevikus! ';
+		}
+		else if(deceasedObj < bornDate){
+			notice += 'Surmakuupäev ei saa olla varasem kui sünnikuupäev! ';
+		}
+	}
+	//kui vigu leidus, saadame sisestatud väärtused mallile tagasi, et neid ei peaks uuesti kirjutama
+	if(notice != ''){
+		console.log("Andmed pole korrektsed!");
+		return res.render('eestifilminimesed_lisa', {notice: notice, firstName: req.body.firstNameInput, lastName: req.body.lastNameInput, born: req.body.bornInput, deceased: req.body.deceasedInput});
 	}
 	let conn;
 	try {
@@ -146,11 +184,13 @@ app.post('/eestifilm/inimesed_lisa', async (req, res)=>{
 			req.body.bornInput,
 			deceasedDate
 		]);
-		res.render('eestifilminimesed_lisa' , {notice: req.body.firstNameInput + req.body.lastNameInput + ' andmebaasi lisatud!'});
+		//korrektse sisestuse puhul jatame sisendid tühjaks (null)
+		res.render('eestifilminimesed_lisa' , {notice: req.body.firstNameInput + req.body.lastNameInput + ' andmebaasi lisatud!', firstName: null, lastName: null, born: null, deceased: null});
 	}
 	catch (err){
 		console.log('Viga andmebaasiga suhtlemisel: ' + err);
-		res.render('eestifilminimesed_lisa' , {notice: 'andmebaasi ei lisatud midagi'});
+		//andmebaasi vea korral jaavad sisestatud vaartused alles
+		res.render('eestifilminimesed_lisa' , {notice: 'andmebaasi ei lisatud midagi', firstName: req.body.firstNameInput, lastName: req.body.lastNameInput, born: req.body.bornInput, deceased: req.body.deceasedInput});
 
 	}
 	finally {
@@ -159,5 +199,90 @@ app.post('/eestifilm/inimesed_lisa', async (req, res)=>{
 		}
 	}
 });
+
+app.get('/eestifilm/filmid_lisa', (req, res)=>{
+	res.render('eestifilmfilmid_lisa', {notice: 'Ootan sisestust!', title: null, releaseYear: null, duration: null, description: null});
+});
+
+app.post('/eestifilm/filmid_lisa', async (req, res)=>{
+	console.log(req.body);
+	//kontrollime andmeid
+	if(!req.body.titleInput || !req.body.releaseYearInput || !req.body.durationInput){
+		console.log("Andmed pole korrektsed!");
+		return res.render('eestifilmfilmid_lisa', {notice: 'Pealkiri, aasta ja kestus on kohustuslikud!', title: req.body.titleInput, releaseYear: req.body.releaseYearInput, duration: req.body.durationInput, description: req.body.descriptionInput});
+	}
+	//kirjeldus pole kohustuslik, tühja asemel salvestame andmebaasi null
+	let description = null;
+	if(req.body.descriptionInput != ''){
+		description = req.body.descriptionInput;
+	}
+	let conn;
+	try {
+		conn = await mysql.createConnection({
+			host: process.env.DB_HOST,
+			user: process.env.DB_USER,
+			password: process.env.DB_PASS,
+			database: process.env.DB_NAME
+		});
+		let sqlReq = 'INSERT INTO movie (title, release_year, duration_minutes, description) VALUES (?,?,?,?)';
+		await conn.execute(sqlReq, [
+			req.body.titleInput,
+			req.body.releaseYearInput,
+			req.body.durationInput,
+			description
+		]);
+		res.render('eestifilmfilmid_lisa', {notice: req.body.titleInput + ' andmebaasi lisatud!', title: null, releaseYear: null, duration: null, description: null});
+	}
+	catch (err){
+		console.log('Viga andmebaasiga suhtlemisel: ' + err);
+		res.render('eestifilmfilmid_lisa', {notice: 'andmebaasi ei lisatud midagi', title: req.body.titleInput, releaseYear: req.body.releaseYearInput, duration: req.body.durationInput, description: req.body.descriptionInput});
+	}
+	finally {
+		if(conn){
+			await conn.end();
+		}
+	}
+}); */
+
+/* app.get('/eestifilm/ametid_lisa', (req, res)=>{
+	res.render('eestifilmametid_lisa', {notice: 'Ootan sisestust!', title: null, description: null});
+});
+
+app.post('/eestifilm/ametid_lisa', async (req, res)=>{
+	console.log(req.body);
+	//kontrollime andmeid
+	if(!req.body.titleInput){
+		console.log("Andmed pole korrektsed!");
+		return res.render('eestifilmametid_lisa', {notice: 'Ameti nimetus on kohustuslik!', title: req.body.titleInput, description: req.body.descriptionInput});
+	}
+	let description = null;
+	if(req.body.descriptionInput != ''){
+		description = req.body.descriptionInput;
+	}
+	let conn;
+	try {
+		conn = await mysql.createConnection({
+			host: process.env.DB_HOST,
+			user: process.env.DB_USER,
+			password: process.env.DB_PASS,
+			database: process.env.DB_NAME
+		});
+		let sqlReq = 'INSERT INTO profession (title, description) VALUES (?,?)';
+		await conn.execute(sqlReq, [
+			req.body.titleInput,
+			description
+		]);
+		res.render('eestifilmametid_lisa', {notice: req.body.titleInput + ' andmebaasi lisatud!', title: null, description: null});
+	}
+	catch (err){
+		console.log('Viga andmebaasiga suhtlemisel: ' + err);
+		res.render('eestifilmametid_lisa', {notice: 'andmebaasi ei lisatud midagi', title: req.body.titleInput, description: req.body.descriptionInput});
+	}
+	finally {
+		if(conn){
+			await conn.end();
+		}
+	}
+}); */
 
 app.listen(5206);

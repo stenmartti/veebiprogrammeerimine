@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+	<meta charset="utf-8">
+	<title>Sten Vikat, veebiprogrammeerimine</title>
+</head>
+<body>
+	<img src="../pic/veebiprogrammeerimine_2026_ID.png" alt="bänner">
+	<h1>Lisa filmiga seotud amet</h1>
+	<ul>
+		<li><a href="/">Tagasi avalehele</a></li>
+		<li><a href="/eestifilm">Tagasi Eesti filmi avalehele</a></li>
+	</ul>
+	<hr>
+	<form method="POST">
+		<label for="titleInput">Ameti nimetus</label>
+		<input id="titleInput" name="titleInput" type="text" placeholder="Nimetus" value="<%= title %>" required>
+		<br>
+		<label for="descriptionInput">Kirjeldus</label>
+		<br>
+		<input id="descriptionInput" name="descriptionInput" placeholder="Kirjeldus"><%= description %></input>
+		<br>
+		<input id="positionSubmit" name="positionSubmit" type="submit" value="Salvesta">
+	</form>
+	<p><%= notice %></p>
+
+</body>
+</html>
