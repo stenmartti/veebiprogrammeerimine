@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+	<meta charset="utf-8">
+	<title>Fotogalerii</title>
+</head>
+<body>
+	<h1>Fotogalerii</h1>
+	<p><a href="/home">Tagasi avalehele</a></p>
+	<p><a href="/logout">Logi välja</a></p>
+	<hr>
+	<% if(galleryData.length === 0){ %>
+		<p>Fotosid pole veel üles laaditud.</p>
+	<% } else { %>
+		<% galleryData.forEach(function(photo){ %>
+			<a href="/gallery/normal/<%= photo.filename %>">
+				<img src="/gallery/thumbs/<%= photo.filename %>" alt="<%= photo.alttext || 'Foto' %>">
+			</a>
+		<% }); %>
+	<% } %>
+</body>
+</html>

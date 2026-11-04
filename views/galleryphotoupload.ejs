@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+	<meta charset="utf-8">
+	<title>Sten Vikat, veebiprogrammeerimine</title>
+</head>
+<body>
+	<img src="../pic/veebiprogrammeerimine_2026_ID.png" alt="bänner">
+	<h1>galeriipiltide üleslaadimine</h1>
+	<ul>
+		<li><a href="/home">Tagasi avalehele</a></li>
+		<p><a href="/logout">Logi välja</a></p>
+	</ul>
+	<hr>
+	<form method="POST" enctype="multipart/form-data">
+		<label for="photoInput">Vali pildifail(jpg)</label>
+		<input id="photoInput" name="photoInput" type="file">
+		<br>
+		<label for="altInput">Foto alternatiivtekst ()alt</label>
+		<input id="altInput" name="altInput" type="text" placeholder="Sellel fotol on...">		
+		<br>
+		<input id="privacyInput1" name="privacyInput" type="radio" value="1" checked>
+		<label for="privacyInput1">Privaatne(ainult ise näen)</label>
+		<br>
+		<input id="privacyInput2" name="privacyInput" type="radio" value="2">
+		<label for="privacyInput2">Sisseloginud kasutajate leht</label>
+		<br>
+		<input id="privacyInput3" name="privacyInput" type="radio" value="3">
+		<label for="privacyInput3">Avalik (kõik näevad)</label>
+		<br>
+		
+
+
+		<br>
+		<input id="photoSubmit" name="photoSubmit" type="submit" value="Lae üles">
+	</form>
+	
+
+</body>
+</html>

@@ -10,13 +10,23 @@
 	 <p>See leht on loodud veebiprogrammeerimise kursusel <a href="https://www.tlu.ee">Tallinna Ülikoolis</a> ning ei sisalda tõsiseltvõetavat sisu!</p>
 	<p>Esialgu tutvusime lihtsalt HTML keelega, peatselt programmeerime.</p>
 	<hr>
-	<p><a href="http://greeny.cs.tlu.ee:5206/mikstlu">Siin saad lugeda, miks tulin TLÜ-sse õppima</a></p>
+	<p><a href="/signup">Kasutajakonto loomine</a></p>
+	<p><a href="/signin">Sisselogimine</a></p>
+	<br>
+	<p><a href="/mikstlu">Siin saad lugeda, miks tulin TLÜ-sse õppima</a></p>
 	<hr>
-	<p><a href="http://greeny.cs.tlu.ee:5206/vanasona">Siit leiad vanasõna</a></p><p>Täna on <%= dayNow %>, <%= dateNow %></p><p>Kellaaeg: <%= timeNow %>.</p><img src="kass.jpg" alt="">
-	<p><a href="http://greeny.cs.tlu.ee:5206/regvisit">Registreeri oma külastus</a></p>
-	<p><a href="http://greeny.cs.tlu.ee:5206/viimanekulastus">Vaata siit selle lehe viimast külastust</a></p>
-	<p><a href="http://greeny.cs.tlu.ee:5206/eestifilm">Eesti film</a></p>
-	<p><a href="http://greeny.cs.tlu.ee:5206/eestifilm/filmid_lisa">Siin saad lisada filmi</a></p>
-	<p><a href="http://greeny.cs.tlu.ee:5206/eestifilm/ametid_lisa">Siin saad lisada ameti</a></p>
+	<p><a href="/vanasona">Siit leiad vanasõna</a></p><p>Täna on <%= dayNow %>, <%= dateNow %></p><p>Kellaaeg: <%= timeNow %>.</p><img src="kass.jpg" alt="">
+	<p><a href="/regvisit">Registreeri oma külastus</a></p>
+	<p><a href="/viimanekulastus">Vaata siit selle lehe viimast külastust</a></p>
+	<p><a href="/eestifilm">Eesti film</a></p>
+	<p><a href="/eestifilm/filmid_lisa">Siin saad lisada filmi</a></p>
+	<p><a href="/eestifilm/ametid_lisa">Siin saad lisada ameti</a></p>
+	<hr>
+	<% if(photoFile){ %>
+		<h2>Uusim avalik foto</h2>
+		<img src="/gallery/normal/<%= photoFile %>" alt="<%= photoAlt %>">
+	<% } else { %>
+		<p>Avalikke fotosid pole veel üles laaditud.</p>
+	<% } %>
 </body>
 </html>
