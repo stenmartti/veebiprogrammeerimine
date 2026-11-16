@@ -7,6 +7,9 @@
 <body>
 <img src="pic/veebiprogrammeerimine_2026_ID.png" alt="">
 	<h1>Sten Vikat, veebiprogrammeerimine</h1>
+	<% if(userId){ %>
+		<p>Sisse logitud: <strong><%= userName %></strong> | <a href="/logout">Logi välja</a></p>
+	<% } %>
 	 <p>See leht on loodud veebiprogrammeerimise kursusel <a href="https://www.tlu.ee">Tallinna Ülikoolis</a> ning ei sisalda tõsiseltvõetavat sisu!</p>
 	<p>Esialgu tutvusime lihtsalt HTML keelega, peatselt programmeerime.</p>
 	<hr>
@@ -15,6 +18,8 @@
 	<p><a href="/eestifilm/ametid_lisa">Siin saad lisada ameti</a></p>
 	<p><a href="/galleryPhotoUpload">Siin saad pildi lisada</a></p>
 	<p><a href="/photogallery">Fotogalerii</a></p>
+	<p><a href="/kasutajaphotogallery">Kasutaja fotogalerii</a></p>
+	<p><a href="/">Tagasi avalehele</a></p>
 	<hr>
 	<% if(photoFile){ %>
 		<h2>Uusim avalik foto</h2>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+	<meta charset="utf-8">
+	<title>Kasutaja fotogalerii</title>
+</head>
+<body>
+	<h1>Kasutaja fotogalerii</h1>
+	<% if(userId){ %>
+		<p>Sisse logitud: <strong><%= userName %></strong> | <a href="/logout">Logi välja</a></p>
+	<% } %>
+	<p><a href="/home">Tagasi avalehele</a></p>
+	<p><a href="/logout">Logi välja</a></p>
+	<hr>
+	<% if(kasutajagalleryData.length === 0){ %>
+		<p>Fotosid pole veel üles laaditud.</p>
+	<% } else { %>
+		<% const privacyTexts = {1: 'Privaatne', 2: 'Sisseloginud kasutajatele', 3: 'Avalik'}; %>
+		<% kasutajagalleryData.forEach(function(photo){ %>
+			<div style="display: inline-block; text-align: center; margin: 10px;">
+				<a href="/gallery/normal/<%= photo.filename %>">
+					<img src="/gallery/thumbs/<%= photo.filename %>" alt="<%= photo.alttext || 'Foto' %>">
+				</a>
+				<br>
+				<small>Privaatsus: <%= privacyTexts[photo.privacy] || 'Teadmata' %></small>
+			</div>
+		<% }); %>
+	<% } %>
+</body>
+</html>

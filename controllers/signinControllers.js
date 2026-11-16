@@ -1,8 +1,6 @@
 const mysql = require('mysql2/promise');
 const argon = require('argon2');
 
-
-
 //@desc page for logging in
 //@route GET /signin
 //@access public
@@ -10,7 +8,6 @@ const argon = require('argon2');
 const signinPage = (req, res) => {
 	res.render('signin', {notice: 'sisesta oma kasutajatunnus ja salasõna!'});
 };
-
 
 //@desc page for logging in
 //@route POST /signin
@@ -28,8 +25,8 @@ const signinPagePost = async (req, res) => {
 			password: process.env.DB_PASS,
 			database: process.env.DB_NAME
 		});
-		
-		let sqlReq = 'SELECT id, password FROM users WHERE email = ?';
+
+		let sqlReq = 'SELECT id, firstname, lastname, password FROM users WHERE email = ?';
 		const [users] = await conn.execute(sqlReq, [req.body.emailInput]);
 		//kui sellist üldse ei leitud
 		if(users.length === 0){
@@ -40,27 +37,26 @@ const signinPagePost = async (req, res) => {
 		const match = await argon.verify(user.password, req.body.passwordInput);
 		if(match){
 			console.log('oled sisseloginud kasutajana: ' + user.id);
+			//paneme sessiooni käima ja salvestame sessioonimuutujad
+			req.session.userId = user.id;
+			req.session.userName = user.firstname + ' ' + user.lastname;
 			return res.redirect('/home');
-
-		} else{
+		} else {
 			return res.render('signin', {notice: 'kasutajatunnus ja/või salasõna on vale!'});
 		}
 	}
 	catch (err) {
 		console.log('viga: ' + err);
-		res.render('signin', {notice: 'sisselogimine ei õnnestunud'} );
+		return res.render('signin', {notice: 'sisselogimine ei õnnestunud'} );
 	}
 	finally {
 		if(conn){
 			await conn.end();
 		}
 	}
-	return res.render('signin');
-
 };
 
-
 module.exports = {
-signinPage,
-signinPagePost
-}
+	signinPage,
+	signinPagePost
+};

@@ -6,7 +6,10 @@ const bodyparser = require('body-parser');
 const mysql = require('mysql2/promise');
 //moodul .env keskkonna muutujate lugemiseks
 require('dotenv').config();
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 
+const loginCheck = require('./src/checkLogin');
 const dateET = require('./src/dateTimeET');
 
 const textRef = "public/txt/vanasonad.txt";
@@ -14,6 +17,30 @@ const regtextRef = "public/txt/visits.txt";
 
 //kÃ¤ivitan funktsiooni express() ja annan nimeks app
 const app = express();
+//sessioonide hoidla andmebaasis
+const sessionStore = new MySQLStore({
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS,
+	database: process.env.DB_NAME
+});
+
+//võtame kasutusele sessioonihalduri
+app.use(session({
+	key: 'sessionId',
+	secret: process.env.SES_SECRET,
+	store: sessionStore,
+	saveUninitialized: false,
+	resave: false
+}));
+
+//teeme sessiooniandmed kõigile vaadetele kättesaadavaks
+app.use((req, res, next) => {
+	res.locals.userId = req.session.userId || null;
+	res.locals.userName = req.session.userName || null;
+	next();
+});
+
 //mÃ¤Ã¤rame renderdusmootori: EJS
 app.set('view engine', 'ejs');
 //mÃ¤Ã¤rame avalikuna kasutatava kataloogi
@@ -82,7 +109,7 @@ app.get('/viimanekulastus', async (req, res)=>{
 });
 
 //sisseloginud kasutajate leht
-app.get('/home', async (req, res) => {
+app.get('/home', loginCheck.isLogin, async (req, res) => {
 	//vaikeväärtused, kui avalikku pilti pole või andmebaasiga tekib viga
 	let photoFile = null;
 	let photoAlt = 'Uusim avalik foto';
@@ -112,10 +139,13 @@ app.get('/home', async (req, res) => {
 			await conn.end();
 		}
 	}
+	res.render('home', {photoFile: photoFile, photoAlt: photoAlt});
 })
 
 //väljalogimine
 app.get('/logout', (req, res) => {
+	//hävitame sessiooni
+	req.session.destroy();
 	res.redirect('/');
 })
 
@@ -148,6 +178,10 @@ app.use('/galleryPhotoUpload', galleryPhotoUploadRouter);
 //galerii marsruut
 const galleryRouter = require('./routes/galleryRoutes');
 app.use('/photogallery', galleryRouter);
+
+//kasutaja galerii marsruut
+const kasutajagalleryRouter = require('./routes/kasutajagalleryRoutes');
+app.use('/kasutajaphotogallery', kasutajagalleryRouter);
 
 //kasutajakonto loomise marsruut
 const signupRouter = require('./routes/signupRoutes');

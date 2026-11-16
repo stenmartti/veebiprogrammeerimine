@@ -6,6 +6,9 @@
 </head>
 <body>
 	<img src="../pic/veebiprogrammeerimine_2026_ID.png" alt="bänner">
+	<% if(userId){ %>
+		<p>Sisse logitud: <strong><%= userName %></strong> | <a href="/logout">Logi välja</a></p>
+	<% } %>
 	<h1>galeriipiltide üleslaadimine</h1>
 	<ul>
 		<li><a href="/home">Tagasi avalehele</a></li>
